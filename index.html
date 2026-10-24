@@ -28,6 +28,7 @@
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <script>
 const { useState, useEffect, useMemo, useRef, createElement: h } = React;
 
@@ -56,12 +57,13 @@ const BATCH_STUDENTS = {
   "4": ["CINDY AULIA PUTRI","NENG AISYAH NURUL KAROMAH","YASPA ZAELANI","M.RULI","ILHAM MAULANA"].sort((a,b) => a.localeCompare(b,"id")),
   "5": ["MAULANA MALIK SAPUTRA","IMPITA SARI","SANGGA NUR CAHYA","RIO RIVALDO","SELVI SALAVIAH"].sort((a,b) => a.localeCompare(b,"id")),
   "6": ["ABDUL JALIL","ABDUL MUHYI","AKMAL ALGHIFARI","DELON SYAIFUL BAHRI","HENDRIS ADAMSYAH","IKHSAN KAMIL","IRPAN","MUHAMMAD FAUZI","MUHAMMAD IRFAN MUNTAHA","NANANG HASMID PUTRA","NANDANG FAUZI","OJI SAPUTRA","SAHID HAKIM","UJANG","WIJOYO","WILKI KOMARA","YUSRI","YUSUF ABDULLATIF"].sort((a,b) => a.localeCompare(b,"id")),
-  "MM": ["AHMAD MUPARIZ","ALYA SAIPATUL MUGHISAH","AMELIA PUTRI RAMADANI","AMIR","ARDELA PRAMUDITA","ARIL FIRMANSYAH","DELVIA MISKA UTAMI","DENDI","DEWI MULIANI BESAN","EDO MAULANA","ELAH FATMAWATI","ERNA NURBAETI","ERIK RODIBILAH","FAHRUL HIDAYAT","FAISAL RAMDANI","FARHAT ASIATUL ISLAM","FARIZ HAMAMI","FARSHA INDRA AJI SATRIA","FIRMAN LAPANDEWA","GALANG AMRIN TIHUN","HERI NURFALAH","IFAN PANDIANSYAH","IKHWAN","JEAN PAUL SUTAN","LESTARI","LIZA SEPTIANI","M. ABDUL ROHMAN FAUZIE","M. ALIYUDIN SAPUTRA","M. GIBRAN SAUQI","M. ILHAM ROTAMA","M SHOLEH HASAN","MARDIAH SALSABILIA","MARSANDA","MOH. FARHAN NAZMI AKBAR","MUHAMMAD IBNU KHOLIK","MUHAMAD MANSUR","MUHAMAD RAMDANI","MUHAMMAD DELVAN FABIANABEL","MUHAMMAD JODI IRAWAN","MUHAMMAD REHAN AWAL PRATAMA","MUHAMMAD RIYADI PANGKA","MULYOSO","NANDI SUPRIADI","NURHAYATI","QOTRUN NADA","RAFLI RIFADILAH HUSNI","RAIHAN NUR WAHID","REFAL PAHLEVI","REZA ADHITYA NUGROHO","RIDWAN MAULANA","RIPAL MAULANA","RISMA","RIZWAN MUBAROK","ROSMIATI","ROSNANI","SAGITA PRAMUDITA","SAHARA PUSPITASARI","SAKA","SARDIVA","SASI NOVITA SARI","SATRIA BIMANTARA","SITI MASLIHAH","SITI RAHMAWATI","SITI SARIPAH","SUCI MIFTAHUL JANNAH","SUDAR DAWAN","SULAEMAN","SURYADIN","TSALSA FAUZIAH","UPI MUTIA TAUFIK","WIDI PERMONO","WILDO HERIYANTO DAWAN","YOGI SUGIH MUKTI"],
+  "MM": ["AHMAD MUPARIZ","ALYA SAIPATUL MUGHISAH","AMELIA PUTRI RAMADANI","AMIR","ARDELA PRAMUDITA","ARIL FIRMANSYAH","DELVIA MISKA UTAMI","DENDI","DEWI MULIANI BESAN","EDO MAULANA","ELAH FATMAWATI","ERNA NURBAETI","ERIK RODIBILAH","FAHRUL HIDAYAT","FAISAL RAMDANI","FARHAT ASIATUL ISLAM","FARIZ HAMAMI","FARSHA INDRA AJI SATRIA","FIRMAN LAPANDEWA","GALANG AMRIN TIHUN","HERI NURFALAH","IFAN PANDIANSYAH","IKHWAN","JEAN PAUL SUTAN","LESTARI","LIZA SEPTIANI","M. ABDUL ROHMAN FAUZIE","M. ALIYUDIN SAPUTRA","M. GIBRAN SAUQI","M. ILHAM ROTAMA","M SHOLEH HASAN","MARDIAH SALSABILIA","MARSANDA","MUHAMMAD IBNU KHOLIK","MUHAMAD RAMDANI","MUHAMMAD DELVAN FABIANABEL","MUHAMMAD JODI IRAWAN","MUHAMMAD REHAN AWAL PRATAMA","MUHAMMAD RIYADI PANGKA","MULYOSO","NANDI SUPRIADI","NURHAYATI","QOTRUN NADA","RAFLI RIFADILAH HUSNI","RAIHAN NUR WAHID","REFAL PAHLEVI","REZA ADHITYA NUGROHO","RIDWAN MAULANA","RIPAL MAULANA","RISMA","RIZWAN MUBAROK","ROSMIATI","ROSNANI","SAGITA PRAMUDITA","SAHARA PUSPITASARI","SAKA","SARDIVA","SASI NOVITA SARI","SATRIA BIMANTARA","SITI MASLIHAH","SITI RAHMAWATI","SITI SARIPAH","SUCI MIFTAHUL JANNAH","SUDAR DAWAN","SULAEMAN","SURYADIN","TSALSA FAUZIAH","UPI MUTIA TAUFIK","WILDO HERIYANTO DAWAN","YOGI SUGIH MUKTI"],
   "MS": ["AGUS SALIM","RENDI SETIAWAN","M FAIZ AFANDI","RAFI WIDYA DHANA","ADELLIANO SETIAWAN","SAPARUDIN","DEDE SUHENDAR"].sort((a,b) => a.localeCompare(b,"id")),
-  "TR": ["SASI NOVITA","SINTA ABIANTI","SITI ALMALIA","SUMARDANI","ABDULLAH","ABIDIN","ADITHIA PERMANA","AGUNG","AHMAD ALI MUDIN","ALAN MAULANA","ALFAIDA DAWAN","ALFIN NURLATUN","ALMAS RAMADHANI","ANISA TIHUN","APRILIANSYAH","ARIVA MUHAMMAD MUNAWAR","ASEP SUBHAN","AYU MUTIARA REGITA CAHYANI","AYU RAHMAWATI","CINTA DEWI SARTIKA","DANDI IRAWAN","DEDE GUNAWAN","DEDE NOVI NADIAH","DENDI SYAFRULLOH","DEPILA","DIAN MENTARI SUCI RAMADINI","DINA","ENDANG SUHENDI","ENDAY","ETTA AISYA MUKADAR","EVI SRI RAHAYU","FACHY FIRMANSYAH","FAKHIRA RAYNA TSANI","FARHAN FIRMANSYAH","FAUZIMAN","FIRMANSYAH (GARUT)","FIRMANSYAH (BOGOR)","FUTRI","HALIMATUSA'DIAH","HILMAN","IBRAHIM MOPIK","IKRAM SURIAH","INDA ANGGUN SARI","INDRI SEFTIYANI","INTAN PERMATA SARI","IRMA","ISWANDI","JULIANTINI PUTRI","KAMIL DAWAN","KHAIRY FAHMI","KHUSNUL KHOTIMAH","LUSI RIJKIYANTI","M RESTU ALFIAT","M SAHRUL MUTAQIN","MAHFUDZ","MAIMUNAH RAHAYAAN","MAULIDA UMI ZAKIAH F.","MUH. JEFRI","MUH. RAFLI KADIR","MUHAMAD ANWAR","MUHAMAD AZZAM NUR RAMADLAN","MUHAMAD BAMBANG","MUHAMAD FAUZI","MUHAMAD NAJRIL ILHAM","MUHAMAD SARDI","MUHAMMAD ALIFATULLAH HIPPY","MUHAMMAD LUKMAN FAJRI","MUHAMMAD NAYIB FAIRUZ","MUHAMMAD RIZQI","MUTIARA FITROTUL NAZIAH","NABILA ELSIVA","NADIATUL KHOIRIYAH","NARIZA RAZAN FATHIN MUSYARY","NAZRIL ILHAM ADITTYA","NENG SRI MARYANI","NETHA AULIA PUTRI BERMAWAN","NOVILATUL KUDSIAH","NUR HAYAT","NURAULIA FEBRIYANTI","NURIA MEILANI","NYALILING TIHUN","OMOY","PAHMI IDRIS","PRITI RAMADANI","RAHMADIA PUTRI","RAHMAT (A17)","RAHMAT (A18)","RAKHA SEFFA AZZIQRI","RANDI MAULANA","REVO MAHDAFIQIH AL-MALIQYO","RIDWAN","RIFKI PADLUR ROHMAN","RIMA ANDINI","ROUDHOTUL JANNAH","SANDRI NURBASAR","SANI SADISAH","SARFAN TIHUN","SAUFANA IS'AFBILLAH","SELILAWATI","SILVA MEDIKA","SILVIA LESTARI","SINTA","SINTIA MAHARANI","SITA AZZAHRA","SITI LUTFIYAH","SITI MULYATI","SITI NUR ALIFAH MUTMAINAH","SITI NURLAELATUL FADILAH","SITI NURPAUJIAH","SITI RAHMAH","SITI RATNA WULAN","SITI SARAH","SUCI AULIA ULFAIZAH","SUKMA ASTARI ELANG","SYIFA LAILATUL HASANAH","SYILVA SAKINATUL ULYA","TASYA SRI RAHMAWATI","UMAR BESAN","WAWAN RIADI DAWAN","WINDI MAELANI","YANRA ARDIANSYAH","ZIDAN MAULANA AZIN","AHMAD DEDY SAPUTRA","ANGGA","DHIATUR RAMADHANI","FHELIA ANUGRAH RIAGINA","GALANG HARY SATRIA","HARRY SETIAWAN","MUHAMMAD FATHUR RAHMAN","MUHMMAD DENI SAFUTRA","RIKWAN HERGAWAN","SITI NURKHOTIMAH"].sort((a,b) => a.localeCompare(b,"id"))
+  "TR": ["SASI NOVITA","SINTA ABIANTI","SITI ALMALIA","SUMARDANI","ABDULLAH","ABIDIN","ADITHIA PERMANA","AGUNG","AHMAD ALI MUDIN","ALAN MAULANA","ALFAIDA DAWAN","ALFIN NURLATUN","ALMAS RAMADHANI","ANISA TIHUN","APRILIANSYAH","ARIVA MUHAMMAD MUNAWAR","ASEP SUBHAN","AYU MUTIARA REGITA CAHYANI","AYU RAHMAWATI","CINTA DEWI SARTIKA","DANDI IRAWAN","DEDE GUNAWAN","DEDE NOVI NADIAH","DENDI SYAFRULLOH","DEPILA","DIAN MENTARI SUCI RAMADINI","DINA","ENDANG SUHENDI","ENDAY","ETTA AISYA MUKADAR","EVI SRI RAHAYU","FACHY FIRMANSYAH","FAKHIRA RAYNA TSANI","FARHAN FIRMANSYAH","FAUZIMAN","FIRMANSYAH (GARUT)","FIRMANSYAH (BOGOR)","FUTRI","HALIMATUSA'DIAH","HILMAN","IBRAHIM MOPIK","IKRAM SURIAH","INDA ANGGUN SARI","INDRI SEFTIYANI","INTAN PERMATA SARI","IRMA","ISWANDI","JULIANTINI PUTRI","KAMIL DAWAN","KHAIRY FAHMI","KHUSNUL KHOTIMAH","LUSI RIJKIYANTI","M RESTU ALFIAT","M SAHRUL MUTAQIN","MAHFUDZ","MAIMUNAH RAHAYAAN","MAULIDA UMI ZAKIAH F.","MUH. JEFRI","MUH. RAFLI KADIR","MUHAMAD ANWAR","MUHAMAD AZZAM NUR RAMADLAN","MUHAMAD BAMBANG","MUHAMAD FAUZI","MUHAMAD NAJRIL ILHAM","MUHAMAD SARDI","MUHAMMAD ALIFATULLAH HIPPY","MUHAMMAD LUKMAN FAJRI","MUHAMMAD NAYIB FAIRUZ","MUHAMMAD RIZQI","MUTIARA FITROTUL NAZIAH","NABILA ELSIVA","NADIATUL KHOIRIYAH","NARIZA RAZAN FATHIN MUSYARY","NAZRIL ILHAM ADITTYA","NENG SRI MARYANI","NETHA AULIA PUTRI BERMAWAN","NOVILATUL KUDSIAH","NUR HAYAT","NURAULIA FEBRIYANTI","NURIA MEILANI","NYALILING TIHUN","OMOY","PAHMI IDRIS","PRITI RAMADANI","RAHMADIA PUTRI","RAHMAT (A17)","RAHMAT (A18)","RAKHA SEFFA AZZIQRI","RANDI MAULANA","REVO MAHDAFIQIH AL-MALIQYO","RIDWAN","RIFKI PADLUR ROHMAN","RIMA ANDINI","ROUDHOTUL JANNAH","SANDRI NURBASAR","SANI SADISAH","SARFAN TIHUN","SAUFANA IS'AFBILLAH","SELILAWATI","SILVA MEDIKA","SILVIA LESTARI","SINTA","SINTIA MAHARANI","SITA AZZAHRA","SITI LUTFIYAH","SITI MULYATI","SITI NUR ALIFAH MUTMAINAH","SITI NURLAELATUL FADILAH","SITI NURPAUJIAH","SITI RAHMAH","SITI RATNA WULAN","SITI SARAH","SUCI AULIA ULFAIZAH","SUKMA ASTARI ELANG","SYIFA LAILATUL HASANAH","SYILVA SAKINATUL ULYA","TASYA SRI RAHMAWATI","UMAR BESAN","WAWAN RIADI DAWAN","WINDI MAELANI","YANRA ARDIANSYAH","ZIDAN MAULANA AZIN","AHMAD DEDY SAPUTRA","ANGGA","DHIATUR RAMADHANI","FHELIA ANUGRAH RIAGINA","GALANG HARY SATRIA","HARRY SETIAWAN","MUHAMMAD FATHUR RAHMAN","MUHMMAD DENI SAFUTRA","RIKWAN HERGAWAN","SITI NURKHOTIMAH"].sort((a,b) => a.localeCompare(b,"id")),
+  "A18": ["Afdal","Ahmad Al Ghani","Angga","Baban","Faiq Khanza ghifar","Fuji Akbar","Gion Apriansyah","Harry Setiawan","Hilman","iden m","M aji agung","M Ali Ramdani","M Arbiyan","M Bilal","M Rahmat","moch ahdan","Moh Fahmi","M damar","Muhammad Deni safutra","M Douzan","Muhammad Fathur rahman","M Hanif","M Rizal","M Sykhoni","Muhammad Rabbani","Rayan ali mumtaz","Rikwan hergawan","Rikza","Sadange Belen","Saprudin","Sahlan","Surya","U Syarif","Yahya Zakaria","Aang maki"].sort((a,b) => a.localeCompare(b,"id"))
 };
 
-const BATCH_LIST = ["1","2","3","4","5","6","MM","MS","TR"];
+const BATCH_LIST = ["1","2","3","4","5","6","MM","MS","TR","A18"];
 const JP_BATCHES = ["1","2","3","4","5","6"];
 const KELAS = "Shalat Subuh";
 
@@ -74,12 +76,14 @@ const BATCH_THEME = {
   "6": { bg:"#ede9fe", accent:"#8b5cf6", accentDark:"#7c3aed", accentLight:"#ddd6fe", label:"Jepang Batch 6🇯🇵" },
   "MM": { bg:"#fef3c7", accent:"#d97706", accentDark:"#b45309", accentLight:"#fde68a", label:"Mekah-Madinah🇸🇦" },
   "MS": { bg:"#fef2f2", accent:"#dc2626", accentDark:"#b91c1c", accentLight:"#fecaca", label:"Mesir🇪🇬" },
-  "TR": { bg:"#eef2ff", accent:"#4f46e5", accentDark:"#4338ca", accentLight:"#c7d2fe", label:"Turki🇹🇷" }
+  "TR": { bg:"#eef2ff", accent:"#4f46e5", accentDark:"#4338ca", accentLight:"#c7d2fe", label:"Turki🇹🇷" },
+  "A18": { bg:"#f0fdfa", accent:"#14b8a6", accentDark:"#0d9488", accentLight:"#99f6e4", label:"Angkatan 18" }
 };
 function sectionOfBatch(b) {
   if (b === "MM") return "MM";
   if (b === "MS") return "MS";
   if (b === "TR") return "TR";
+  if (b === "A18") return "A18";
   return "JP";
 }
 
@@ -374,6 +378,18 @@ const [flashOn, setFlashOn] = useState(false);
 const [editRows, setEditRows] = useState([]);
 const [editSaving, setEditSaving] = useState(false);
   const [alfaConfirm, setAlfaConfirm] = useState(false);
+  const [showBelumAbsen, setShowBelumAbsen] = useState(false);
+const [belumAbsenSearch, setBelumAbsenSearch] = useState("");
+const [statusListModal, setStatusListModal] = useState(null);
+const [statusListSearch, setStatusListSearch] = useState("");
+const [showSalinRekapMenu, setShowSalinRekapMenu] = useState(false);
+const [salinRekapRange, setSalinRekapRange] = useState("1w");
+const [salinRekapStart, setSalinRekapStart] = useState(() => dateOffsetStr(new Date(), -6));
+const [salinRekapEnd, setSalinRekapEnd] = useState(() => toInputDate(new Date()));
+const [salinRekapSelected, setSalinRekapSelected] = useState({});
+const [salinRekapBusy, setSalinRekapBusy] = useState(false);
+const [salinRekapMonth, setSalinRekapMonth] = useState(() => new Date().getMonth());
+const [salinRekapYear, setSalinRekapYear] = useState(() => new Date().getFullYear());
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const searchInputRef = useRef(null);
@@ -938,6 +954,15 @@ el.style.boxShadow = "0 0 0 8px rgba(0,0,0,.18)";
   }, [attendance, list]);
 
   const belum = list.length - (counts.HADIR + counts.SAKIT + counts.IZIN + counts.ALFA);
+  const belumAbsenList = useMemo(
+  () => list.filter(n => !normalizeStatus(attendance[n])),
+  [list, attendance]
+);
+const belumAbsenFiltered = useMemo(() => {
+  const q = belumAbsenSearch.trim().toLowerCase();
+  if (!q) return belumAbsenList;
+  return belumAbsenList.filter(n => n.toLowerCase().includes(q));
+}, [belumAbsenList, belumAbsenSearch]);
 
   const openIzinPopup = (name) => {
     setIzinCustomTemp("");
@@ -1040,7 +1065,30 @@ el.style.boxShadow = "0 0 0 8px rgba(0,0,0,.18)";
     }
     setAlfaConfirm(true);
   };
-
+  
+  const markAllHadir = () => {
+  if (!isAdmin) return;
+  const belumDiisi = list.filter(s => !attendance[s]);
+  if (belumDiisi.length === 0) {
+    setShowBelumAbsen(false);
+    toast("✅ Semua sudah ada keterangan");
+    return;
+  }
+  pushHistory();
+  markDirtyMany(belumDiisi);
+  setAttendance(prev => {
+    const n = { ...prev };
+    list.forEach(s => { if (!n[s]) n[s] = "HADIR"; });
+    return n;
+  });
+  setIzinReasons(prev => {
+    const n = { ...prev };
+    list.forEach(s => { if (!attendance[s]) n[s] = ""; });
+    return n;
+  });
+  setShowBelumAbsen(false);
+  toast(`✅ ${belumDiisi.length} yang belum ada keterangan ditandai HADIR`);
+};
   const markAllAlfa = () => {
     if (!isAdmin) return;
     const belumDiisi = list.filter(s => !attendance[s]);
@@ -1430,7 +1478,21 @@ const openEditStudent = (name) => {
 };
 
 const addEditRow = () => {
-  setEditRows(prev => [...prev, { date: dateStr, status: "", reason: "" }]);
+  setEditRows(prev => {
+    const existing = prev.map(r => r.date).filter(Boolean).sort();
+    let nextDate = dateStr;
+    if (existing.length) {
+      const earliest = existing[0];
+      const [y, m, d] = earliest.split("-").map(Number);
+      const dt = new Date(y, m - 1, d);
+      // Mundur 1 hari, kalau masih bentrok, mundur terus
+      do {
+        dt.setDate(dt.getDate() - 1);
+        nextDate = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
+      } while (existing.includes(nextDate) && (dt.getTime() > Date.now() - 1000*60*60*24*365));
+    }
+    return [...prev, { date: nextDate, status: "", reason: "" }];
+  });
 };
 
 const updateEditRow = (idx, patch) => {
@@ -1647,76 +1709,6 @@ const saveEditStudent = async () => {
     return { names, matrix, totals };
   };
 
-  const xmlEscape = (s) => String(s)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-
-  const buildSheetXml = (sheetLabel, dateList, names, matrix, totals) => {
-    let rows = "";
-    rows += `<Row>`;
-    rows += `<Cell><Data ss:Type="String">No</Data></Cell>`;
-    rows += `<Cell><Data ss:Type="String">Nama</Data></Cell>`;
-    dateList.forEach(ds => {
-      rows += `<Cell><Data ss:Type="String">${xmlEscape(ds.slice(8))}</Data></Cell>`;
-    });
-    rows += `<Cell><Data ss:Type="String">H</Data></Cell>`;
-    rows += `<Cell><Data ss:Type="String">I</Data></Cell>`;
-    rows += `<Cell><Data ss:Type="String">S</Data></Cell>`;
-    rows += `<Cell><Data ss:Type="String">A</Data></Cell>`;
-    rows += `</Row>`;
-    names.forEach((n, idx) => {
-      const t = totals[n] || { HADIR:0, IZIN:0, SAKIT:0, ALFA:0 };
-      rows += `<Row>`;
-      rows += `<Cell><Data ss:Type="Number">${idx+1}</Data></Cell>`;
-      rows += `<Cell><Data ss:Type="String">${xmlEscape(n)}</Data></Cell>`;
-      dateList.forEach(ds => {
-        const st = (matrix[n] && matrix[n][ds]) || null;
-        rows += `<Cell><Data ss:Type="String">${xmlEscape(statusShort(st))}</Data></Cell>`;
-      });
-      rows += `<Cell><Data ss:Type="Number">${t.HADIR}</Data></Cell>`;
-      rows += `<Cell><Data ss:Type="Number">${t.IZIN}</Data></Cell>`;
-      rows += `<Cell><Data ss:Type="Number">${t.SAKIT}</Data></Cell>`;
-      rows += `<Cell><Data ss:Type="Number">${t.ALFA}</Data></Cell>`;
-      rows += `</Row>`;
-    });
-    return `
-  <Worksheet ss:Name="${xmlEscape(sheetLabel)}">
-    <Table>
-      <Column ss:Width="30"/>
-      <Column ss:Width="160"/>
-      ${dateList.map(() => '<Column ss:Width="28"/>').join("")}
-      <Column ss:Width="28"/><Column ss:Width="28"/><Column ss:Width="28"/><Column ss:Width="28"/>
-      ${rows}
-    </Table>
-  </Worksheet>`;
-  };
-
-  const downloadSpreadsheetXml = (xmlBody, filename) => {
-    const full = `<?xml version="1.0"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:o="urn:schemas-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-com:office:excel"
- xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
- xmlns:html="http://www.w3.org/TR/REC-html40">
-  <Styles>
-    <Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/></Style>
-  </Styles>
-  ${xmlBody}
-</Workbook>`;
-    const blob = new Blob([full], { type: "application/vnd.ms-excel" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   const getDashboardDateList = () => {
     const year = dashYear;
     const month = dashMonth;
@@ -1733,46 +1725,256 @@ const saveEditStudent = async () => {
     }
     return dateList;
   };
+  
+  const MONTH_NAMES_RK = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 
-  const exportDashboardXLS = () => {
-    if (!dashboardData || !dashboardData.matrix) {
-      toast("⚠️ Tidak ada data dashboard — klik Tampilkan Rekap dulu");
-      return;
+const getStudentsForBatch = async (b) => {
+  try {
+    const snap = await db.ref(studentsPath(b)).once("value");
+    const val = snap.val();
+    if (Array.isArray(val) && val.length) {
+      return val.map(n => String(n).trim()).filter(Boolean).sort((a,c) => a.localeCompare(c, "id"));
     }
-    const { start, end, dates, matrix, totals, batchLabel: bl, names, batchKey } = dashboardData;
-    const nameList = names || students;
-    const bKey = batchKey || dashBatch || batch;
-    const sheet = buildSheetXml(sheetNameForBatch(bKey), dates, nameList, matrix, totals);
-    downloadSpreadsheetXml(sheet, `Rekap_${String(bl).replace(/\s/g,"_")}_${start}_sd_${end}.xls`);
-    toast("📥 XLS program ini diunduh");
-  };
+  } catch {}
+  return (BATCH_STUDENTS[b] || []).map(n => String(n).trim()).filter(Boolean).sort((a,c) => a.localeCompare(c, "id"));
+};
 
-  const exportAllProgramsXLS = async () => {
-    if (!isAdmin) return;
-    const dateList = getDashboardDateList();
-    if (!dateList.length) {
-      toast("⚠️ Pilih periode dulu");
-      return;
-    }
-    setDashboardLoading(true);
-    toast("⏳ Menyusun rekap semua program...");
+const buildRekapTextFor = async (batchKey, dateList) => {
+  const names = await getStudentsForBatch(batchKey);
+  if (!names.length) return null;
+
+  const th = BATCH_THEME[batchKey] || {};
+  const label = th.label || batchKey;
+
+  const attMap = {};
+  names.forEach(n => { attMap[n] = {}; });
+  await Promise.all(dateList.map(async ds => {
     try {
-      let sheetsXml = "";
+      const snap = await db.ref(attendancePath(batchKey, ds)).once("value");
+      const val = snap.val() || {};
+      names.forEach(n => {
+        const item = val[toFbKey(n)] !== undefined ? val[toFbKey(n)] : val[n];
+        let st = null;
+        if (item && typeof item === "object") st = normalizeStatus(item.status);
+        else if (typeof item === "string") st = normalizeStatus(item);
+        if (batchKey === batch && ds === dateStr && attendance[n]) st = normalizeStatus(attendance[n]);
+        attMap[n][ds] = st;
+      });
+    } catch {
+      names.forEach(n => { attMap[n][ds] = attMap[n][ds] || null; });
+    }
+  }));
+
+  const [y0, m0, day0] = dateList[0].split("-").map(Number);
+  const [yN, mN, dayN] = dateList[dateList.length - 1].split("-").map(Number);
+  let dateLabel;
+  if (y0 === yN && m0 === mN) dateLabel = `${day0}-${dayN}`;
+  else if (y0 === yN) dateLabel = `${day0} ${MONTH_NAMES_RK[m0-1]} - ${dayN} ${MONTH_NAMES_RK[mN-1]}`;
+  else dateLabel = `${day0}/${m0}/${y0} - ${dayN}/${mN}/${yN}`;
+
+  let t = `Rekapan (${label})\n`;
+  t += `Tanggal: ${dateLabel}\n`;
+  names.forEach((name, i) => {
+    const emojis = dateList.map(ds => {
+      const st = attMap[name][ds];
+      if (st === "HADIR") return "✅";
+      if (st === "SAKIT") return "🆘";
+      if (st === "IZIN") return "ℹ️";
+      if (st === "ALFA") return "❌";
+      return "⬜";
+    }).join("");
+    t += `${i + 1}. ${name} ${emojis}\n`;
+  });
+  t += `\n✅ Hadir · 🆘 Sakit · ℹ️ Izin · ❌ Alfa · ⬜ Belum`;
+  return t;
+};
+
+const openSalinRekapMenu = () => {
+  if (dashboardData && dashboardData.start && dashboardData.end) {
+    setSalinRekapRange("custom");
+    setSalinRekapStart(dashboardData.start);
+    setSalinRekapEnd(dashboardData.end);
+    setSalinRekapSelected({ [dashboardData.batchKey]: true });
+  } else {
+    setSalinRekapRange("1w");
+    setSalinRekapStart(dateOffsetStr(new Date(), -6));
+    setSalinRekapEnd(toInputDate(new Date()));
+    setSalinRekapSelected({ [batch]: true });
+  }
+  setShowSalinRekapMenu(true);
+};
+
+const handleSalinRekapRangeChange = (range) => {
+  setSalinRekapRange(range);
+  if (range === "custom" && (!salinRekapStart || !salinRekapEnd)) {
+    setSalinRekapStart(dateOffsetStr(new Date(), -6));
+    setSalinRekapEnd(toInputDate(new Date()));
+  }
+};
+
+const doSalinRekap = async () => {
+  setSalinRekapBusy(true);
+  try {
+    let dateList = [];
+    const today = new Date();
+    if (salinRekapRange === "1w") {
+      for (let i = 6; i >= 0; i--) dateList.push(dateOffsetStr(today, -i));
+    } else if (salinRekapRange === "2w") {
+      for (let i = 13; i >= 0; i--) dateList.push(dateOffsetStr(today, -i));
+    } else if (salinRekapRange === "1m") {
+      const daysInMonth = new Date(salinRekapYear, salinRekapMonth + 1, 0).getDate();
+      const s = `${salinRekapYear}-${String(salinRekapMonth+1).padStart(2,"0")}-01`;
+      const e = `${salinRekapYear}-${String(salinRekapMonth+1).padStart(2,"0")}-${String(daysInMonth).padStart(2,"0")}`;
+      dateList = eachDateStr(s, e);
+    } else {
+      if (!salinRekapStart || !salinRekapEnd) { toast("⚠️ Pilih tanggal mulai dan akhir"); setSalinRekapBusy(false); return; }
+      if (salinRekapStart > salinRekapEnd) { toast("⚠️ Tanggal mulai harus sebelum akhir"); setSalinRekapBusy(false); return; }
+      dateList = eachDateStr(salinRekapStart, salinRekapEnd);
+    }
+
+    if (!dateList.length) { toast("⚠️ Tidak ada tanggal"); setSalinRekapBusy(false); return; }
+
+    const selectedKeys = Object.keys(salinRekapSelected).filter(k => salinRekapSelected[k]);
+    if (!selectedKeys.length) { toast("⚠️ Pilih minimal 1 batch dulu"); setSalinRekapBusy(false); return; }
+
+    const blocks = [];
+    for (const k of selectedKeys) {
+      try {
+        const b = await buildRekapTextFor(k, dateList);
+        if (b) blocks.push(b);
+      } catch (err) { console.warn("salin rekap batch " + k + " gagal", err); }
+    }
+    if (!blocks.length) { toast("⚠️ Tidak ada data"); setSalinRekapBusy(false); return; }
+
+    const text = blocks.join("\n\n━━━━━━━━━━━━━━━\n\n");
+    setPreviewText(text);
+    setShowSalinRekapMenu(false);
+    setShowPreview(true);
+    setTimeout(() => { if (taRef.current) { taRef.current.focus(); taRef.current.select(); } }, 120);
+    const ok = await copyText(text);
+    toast(ok ? "✅ Rekap disalin (" + blocks.length + " batch)!" : "⚠️ Teks siap — klik Kirim untuk WA");
+  } catch (err) {
+    console.warn("salin rekap error", err);
+    toast("⚠️ Gagal menyusun rekap");
+  }
+  setSalinRekapBusy(false);
+};
+  /* ===== Ekspor Gabungan Rapi (1 sheet + warna + border) ===== */
+  const exportAllProgramsXlsxRapi = async () => {
+    if (!isAdmin) return toast("⚠️ Hanya admin");
+    if (typeof ExcelJS === "undefined") return toast("⚠️ ExcelJS belum termuat, coba refresh");
+    const dateList = getDashboardDateList();
+    if (!dateList.length) return toast("⚠️ Pilih periode dulu");
+    setDashboardLoading(true);
+    toast("⏳ Menyusun rekap gabungan rapi…");
+    try {
+      const allRows = [];
       for (const b of BATCH_LIST) {
         const { names, matrix, totals } = await buildMatrixForBatch(b, dateList);
-        sheetsXml += buildSheetXml(sheetNameForBatch(b), dateList, names, matrix, totals);
+        if (!names || !names.length) continue;
+        const sheetLabel = sheetNameForBatch(b);
+        names.forEach(n => {
+          const t = totals[n] || { HADIR:0, IZIN:0, SAKIT:0, ALFA:0 };
+          const days = dateList.map(ds => {
+            const st = (matrix[n] && matrix[n][ds]) || null;
+            return statusShort(st);
+          });
+          allRows.push({ program: sheetLabel, nama: n, days, h: t.HADIR||0, i: t.IZIN||0, s: t.SAKIT||0, a: t.ALFA||0 });
+        });
       }
-      const start = dateList[0];
-      const end = dateList[dateList.length - 1];
-      const monthLabel = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"][dashMonth] + "_" + dashYear;
-      downloadSpreadsheetXml(sheetsXml, `Rekap_SEMUA_PROGRAM_${monthLabel}_${start}_sd_${end}.xls`);
-      toast("✅ XLS semua program diunduh (" + BATCH_LIST.length + " sheet)");
-    } catch (err) {
-      console.warn(err);
-      toast("⚠️ Gagal ekspor semua program");
-    }
+      if (!allRows.length) { setDashboardLoading(false); return toast("⚠️ Tidak ada data"); }
+
+      const dayCount = dateList.length;
+      const start = dateList[0], end = dateList[dateList.length-1];
+      const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+      const monthLabel = monthNames[dashMonth] || "Absensi";
+      const year = dashYear || start.slice(0, 4);
+
+      const workbook = new ExcelJS.Workbook();
+      const ws = workbook.addWorksheet("Rekap Absensi Gabungan");
+      const headerFill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF1F4E79" } };
+      const headerFont = { name: "Arial", bold: true, color: { argb: "FFFFFFFF" }, size: 10 };
+      const normalFont = { name: "Arial", size: 9 };
+      const titleFont = { name: "Arial", bold: true, size: 14, color: { argb: "FF1F4E79" } };
+      const subtitleFont = { name: "Arial", bold: true, size: 11 };
+      const thinBorder = { top:{style:"thin"}, left:{style:"thin"}, bottom:{style:"thin"}, right:{style:"thin"} };
+      const fillH = { type: "pattern", pattern: "solid", fgColor: { argb: "FFC6EFCE" } };
+      const fillI = { type: "pattern", pattern: "solid", fgColor: { argb: "FFBDD7EE" } };
+      const fillS = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE2D5F1" } };
+      const fillA = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFC7CE" } };
+      const totalCols = 3 + dayCount + 4;
+
+      ws.mergeCells(1, 1, 1, totalCols);
+      const titleCell = ws.getCell(1, 1);
+      titleCell.value = `REKAP ABSENSI SEMUA PROGRAM - ${String(monthLabel).toUpperCase()} ${year}`;
+      titleCell.font = titleFont;
+      titleCell.alignment = { horizontal: "center", vertical: "middle" };
+
+      ws.mergeCells(2, 1, 2, totalCols);
+      const subCell = ws.getCell(2, 1);
+      subCell.value = `Periode: ${start} s.d. ${end} | Digabung dari semua batch/program`;
+      subCell.font = subtitleFont;
+      subCell.alignment = { horizontal: "center", vertical: "middle" };
+
+      const headers = ["No", "Program", "Nama"];
+      dateList.forEach(ds => headers.push(ds.slice(8)));
+      headers.push("H", "I", "S", "A");
+      const headerRow = ws.getRow(4);
+      headers.forEach((h, i) => {
+        const cell = headerRow.getCell(i + 1);
+        cell.value = h; cell.font = headerFont; cell.fill = headerFill;
+        cell.alignment = { horizontal: "center", vertical: "middle" }; cell.border = thinBorder;
+      });
+      headerRow.height = 22;
+
+      allRows.forEach((r, idx) => {
+        const row = ws.getRow(idx + 5);
+        const c1 = row.getCell(1); c1.value = idx+1; c1.font = normalFont; c1.alignment = {horizontal:"center",vertical:"middle"}; c1.border = thinBorder;
+        const c2 = row.getCell(2); c2.value = r.program; c2.font = normalFont; c2.alignment = {horizontal:"center",vertical:"middle"}; c2.border = thinBorder;
+        const c3 = row.getCell(3); c3.value = r.nama; c3.font = normalFont; c3.alignment = {horizontal:"left",vertical:"middle"}; c3.border = thinBorder;
+        r.days.forEach((val, dIdx) => {
+          const cell = row.getCell(4 + dIdx);
+          cell.value = val; cell.font = normalFont; cell.alignment = {horizontal:"center",vertical:"middle"}; cell.border = thinBorder;
+          if (val === "H") cell.fill = fillH;
+          else if (val === "I") cell.fill = fillI;
+          else if (val === "S") cell.fill = fillS;
+          else if (val === "A") cell.fill = fillA;
+        });
+        [r.h, r.i, r.s, r.a].forEach((val, tIdx) => {
+          const cell = row.getCell(4 + dayCount + tIdx);
+          cell.value = val; cell.font = normalFont; cell.alignment = {horizontal:"center",vertical:"middle"}; cell.border = thinBorder;
+          if (val > 0) cell.fill = [fillH, fillI, fillS, fillA][tIdx];
+        });
+      });
+
+      ws.getColumn(1).width = 5; ws.getColumn(2).width = 22; ws.getColumn(3).width = 28;
+      for (let i = 4; i < 4 + dayCount; i++) ws.getColumn(i).width = 3.5;
+      for (let i = 4 + dayCount; i < 4 + dayCount + 4; i++) ws.getColumn(i).width = 4.5;
+
+      const legendStart = 4 + allRows.length + 2;
+      ws.getCell(legendStart, 1).value = "Keterangan:";
+      ws.getCell(legendStart, 1).font = { name: "Arial", bold: true, size: 10 };
+      [["H","= Hadir (Hijau)",fillH],["I","= Izin (Biru)",fillI],["S","= Sakit (Ungu)",fillS],["A","= Alpha (Merah)",fillA],["-","= Tidak ada data / Libur",null]].forEach((leg, i) => {
+        const cell = ws.getCell(legendStart + 1 + i, 1);
+        cell.value = leg[0]; if (leg[2]) cell.fill = leg[2];
+        cell.border = thinBorder; cell.alignment = { horizontal: "center" };
+        cell.font = { name: "Arial", bold: true, size: 9 };
+        ws.getCell(legendStart + 1 + i, 2).value = leg[1];
+        ws.getCell(legendStart + 1 + i, 2).font = normalFont;
+      });
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a"); a.href = url;
+      a.download = `Rekap_Absensi_${monthLabel}_${year}_Gabungan.xlsx`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast("✅ Excel gabungan rapi diunduh");
+    } catch (err) { console.error(err); toast("⚠️ Gagal ekspor gabungan"); }
     setDashboardLoading(false);
   };
+
 
   const statusBarBg = !isOnline ? "#fef2f2" : saveStatus === "saving" ? "#fffbeb" : saveStatus === "saved" ? "#ecfdf5" : "#f8fafc";
   const statusBarBorder = !isOnline ? "#fecaca" : saveStatus === "saving" ? "#fde68a" : saveStatus === "saved" ? "#a7f3d0" : "#e2e8f0";
@@ -1882,7 +2084,7 @@ h("div", { style:{ maxWidth:960, margin:"0 auto", padding:"24px 16px 0" } }, [
                 color:"#fff", display:"flex", alignItems:"center", justifyContent:"center",
                 fontWeight:900, fontSize:13, letterSpacing:"0.05em"
               }
-            }, batch === "MM" ? "MM" : (batch === "MS" ? "MS" : (batch === "TR" ? "TR" : ("B" + batch)))),
+            }, batch === "MM" ? "MM" : (batch === "MS" ? "MS" : (batch === "TR" ? "TR" : (batch === "A18" ? "A18" : ("B" + batch))))),
             h("div", null, [
               h("div", { style:{ fontSize:18, fontWeight:800, letterSpacing:"-0.025em" } }, "ABSENSI KEHADIRAN SHALAT SUBUH"),
               h("div", { style:{ fontSize:11, fontWeight:600, letterSpacing:"0.14em", color:"rgba(0,0,0,.4)", marginTop:4 } },
@@ -1981,7 +2183,19 @@ h("div", { style:{ maxWidth:960, margin:"0 auto", padding:"24px 16px 0" } }, [
                 color: batch === "TR" ? "#fff" : "rgba(0,0,0,.5)",
                 boxShadow: batch === "TR" ? "0 6px 20px rgba(0,0,0,.12)" : "none"
               }
-            }, "TURKI")
+            }, "TURKI"),
+            h("button", {
+  key: "A18",
+  onClick: () => switchBatch("A18"),
+  style: {
+    flex:1, height:48, borderRadius:12, fontWeight:700, fontSize:10,
+    border:"none", cursor:"pointer", transition:"all .3s",
+    background: batch === "A18" ? "#14b8a6" : "rgba(255,255,255,.7)",
+    color: batch === "A18" ? "#fff" : "rgba(0,0,0,.5)",
+    boxShadow: batch === "A18" ? "0 6px 20px rgba(0,0,0,.12)" : "none",
+    padding: "0 6px"
+  }
+}, "ANGKATAN 18")
           ]),
           sectionOfBatch(batch) === "JP" && h("div", {
             style: { display:"flex", gap:6, padding:6, borderRadius:16, background:"#f4f4f5", marginTop:10 }
@@ -2061,12 +2275,22 @@ h("div", { style:{ maxWidth:960, margin:"0 auto", padding:"24px 16px 0" } }, [
       }, ["HADIR","SAKIT","IZIN","ALFA"].map(k => {
         const st = STATUS[k];
         return h("div", {
-          key: k,
-          style: {
-            borderRadius:16, background:"#fff", border:"1px solid rgba(0,0,0,.05)",
-            boxShadow:"0 6px 24px rgba(0,0,0,.04)", padding:"14px 16px"
-          }
-        }, [
+  key: k,
+  onClick: () => { setStatusListSearch(""); setStatusListModal(k); },
+  style: {
+    borderRadius:16, background:"#fff", border:"1px solid rgba(0,0,0,.05)",
+    boxShadow:"0 6px 24px rgba(0,0,0,.04)", padding:"14px 16px",
+    cursor: "pointer", transition: "all .2s"
+  },
+  onMouseEnter: e => {
+    e.currentTarget.style.transform = "translateY(-2px)";
+    e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,.08)";
+  },
+  onMouseLeave: e => {
+    e.currentTarget.style.transform = "translateY(0)";
+    e.currentTarget.style.boxShadow = "0 6px 24px rgba(0,0,0,.04)";
+  }
+}, [
           h("div", { style:{ display:"flex", justifyContent:"space-between", alignItems:"center" } }, [
             h("span", { style:{ fontSize:10, fontWeight:800, letterSpacing:"0.14em", color:"rgba(0,0,0,.4)" } }, k),
             h("span", { style:{ fontSize:13 } }, st.icon)
@@ -2088,8 +2312,31 @@ h("div", { style:{ maxWidth:960, margin:"0 auto", padding:"24px 16px 0" } }, [
       })),
 
       h("div", { style:{ marginTop:20, display:"flex", gap:10, flexWrap:"wrap", alignItems:"center" } }, [
-        isAdmin && h("button", {
-          onClick: openAlfaConfirm,
+  h("button", {
+    onClick: () => {
+      if (loadingFb) return;
+      setBelumAbsenSearch("");
+      setShowBelumAbsen(true);
+    },
+    disabled: loadingFb,
+    title: loadingFb ? "Sedang memuat..." : (belum > 0 ? "Lihat siapa yang belum absen" : "Semua sudah diabsen"),
+    style: {
+      height:44, padding:"0 18px", borderRadius:12,
+      background: loadingFb ? "#f4f4f5" : "#fff",
+      border: loadingFb ? "1px solid #e4e4e7" : "1px solid rgba(251,146,60,.4)",
+      fontWeight:700, fontSize:13,
+      color: loadingFb ? "#a1a1aa" : "#ea580c",
+      boxShadow:"0 1px 2px rgba(0,0,0,.05)",
+      cursor: loadingFb ? "not-allowed" : "pointer",
+      display:"flex", alignItems:"center", gap:6,
+      opacity: loadingFb ? 0.6 : 1
+    }
+  }, [
+    loadingFb ? "⏳ Memuat..." : "👀 Belum Absen",
+    (!loadingFb && belum > 0) ? " (" + belum + ")" : ""
+  ]),
+  isAdmin && h("button", {
+    onClick: openAlfaConfirm,
           title: "Tandai ALFA hanya untuk siswa yang belum ada keterangan",
           style: {
             height:44, padding:"0 18px", borderRadius:12, background:"#fff",
@@ -2268,7 +2515,7 @@ h("div", { style:{ maxWidth:960, margin:"0 auto", padding:"24px 16px 0" } }, [
                 fontSize: 11, fontWeight: 800, background: "#e2e8f0", color: "#475569"
               }
             }, i + 1),
-            h("span", { style: { flex: 1, fontWeight: 700, fontSize: 14, color: "#1e293b" } }, name),
+            h("span", { style: { flex: 1, fontWeight: 700, fontSize: 14, color: "#1e293b", textTransform:"uppercase" } }, name),
 h("button", {
   onClick: () => openRename(name),
   title: "Ganti nama (riwayat tetap aman)",
@@ -2322,8 +2569,8 @@ h("button", {
             h("div", { style:{ minWidth:0, flex:1 } }, [
               h("div", { style:{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" } }, [
                 h("span", {
-                  style: { fontWeight:800, fontSize:15, color: meta ? meta.text : "#111", letterSpacing:"-0.025em" }
-                }, name),
+  style: { fontWeight:800, fontSize:15, color: meta ? meta.text : "#111", letterSpacing:"-0.025em", textTransform:"uppercase" }
+}, name),
                   (st && meta)
     ? h("span", {
         style: {
@@ -2480,7 +2727,7 @@ h("button", {
 
     showPreview && h("div", {
       style: {
-        position:"fixed", inset:0, zIndex:100,
+        position:"fixed", inset:0, zIndex:250,
         display:"flex", alignItems:"flex-end", justifyContent:"center"
       }
     }, [
@@ -2889,7 +3136,7 @@ h("button", {
               BATCH_LIST.map(b => {
                 const th = BATCH_THEME[b] || {};
                 const active = dashBatch === b;
-                const short = b === "MM" ? "MM" : b === "MS" ? "MS" : b === "TR" ? "TR" : ("B" + b);
+                const short = b === "MM" ? "MM" : b === "MS" ? "MS" : b === "TR" ? "TR" : b === "A18" ? "A18" : ("B" + b);
                 return h("button", {
                   key: b,
                   onClick: () => {
@@ -2919,12 +3166,19 @@ h("button", {
                 }
               }, "Tampilkan Rekap"),
               h("button", {
-                onClick: exportAllProgramsXLS,
+  onClick: openSalinRekapMenu,
+  style: {
+    height:40, padding:"0 16px", borderRadius:10, border:"1px solid #cbd5e1",
+    background:"#fff", color:"#0f172a", fontWeight:700, fontSize:13, cursor:"pointer"
+  }
+}, "📋 Salin Rekap"),
+              h("button", {
+                onClick: exportAllProgramsXlsxRapi,
                 style: {
-                  height:40, padding:"0 16px", borderRadius:10, border:"1px solid #cbd5e1",
-                  background:"#fff", color:"#0f172a", fontWeight:700, fontSize:13, cursor:"pointer"
+                  height:40, padding:"0 16px", borderRadius:10, border:"1px solid #16a34a",
+                  background:"#f0fdf4", color:"#15803d", fontWeight:700, fontSize:13, cursor:"pointer"
                 }
-              }, "📥 Ekspor Semua Program")
+              }, "📥 Ekspor Gabungan Rapi")
             ])
           ])
         ]),
@@ -2962,8 +3216,8 @@ h("button", {
                   const t = (dashboardData.totals && dashboardData.totals[n]) || { HADIR:0, IZIN:0, SAKIT:0, ALFA:0 };
                   return h("tr", { key: n, style:{ borderBottom:"1px solid #f1f5f9" } }, [
                     h("td", {
-                      style: { padding:"6px", fontWeight:700, position:"sticky", left:0, background:"#fff", whiteSpace:"nowrap" }
-                    }, n),
+  style: { padding:"6px", fontWeight:700, position:"sticky", left:0, background:"#fff", whiteSpace:"nowrap", textTransform:"uppercase" }
+}, n),
                     ...dashboardData.dates.map(ds => {
                       const st = (dashboardData.matrix[n] && dashboardData.matrix[n][ds]) || null;
                       let bg = "transparent";
@@ -2987,25 +3241,10 @@ h("button", {
               )
             ])
           ),
-          h("div", { style:{ display:"flex", flexWrap:"wrap", gap:10, marginTop:14 } }, [
-            h("button", {
-              onClick: exportDashboardXLS,
-              style: {
-                height:42, padding:"0 16px", borderRadius:10, border:"none",
-                background:"#0f172a", color:"#fff", fontWeight:700, fontSize:13, cursor:"pointer"
-              }
-            }, "📥 Ekspor Program Ini"),
-            h("button", {
-              onClick: exportAllProgramsXLS,
-              style: {
-                height:42, padding:"0 16px", borderRadius:10, border:"none",
-                background: theme.accent, color:"#fff", fontWeight:700, fontSize:13, cursor:"pointer"
-              }
-            }, "📥 Ekspor Semua Program")
-          ])
-        ])
-      ])
-    ]),
+                  null
+    ])
+  ])
+]),
 
     alfaConfirm && h("div", {
       style: {
@@ -3447,9 +3686,9 @@ h("button", {
                     background: (BATCH_THEME[r.batch] && BATCH_THEME[r.batch].accentLight) || "#e2e8f0",
                     color: (BATCH_THEME[r.batch] && BATCH_THEME[r.batch].accentDark) || "#475569"
                   }
-                }, r.batch === "MM" ? "MM" : r.batch === "MS" ? "MS" : r.batch === "TR" ? "TR" : ("B" + r.batch)),
+                }, r.batch === "MM" ? "MM" : r.batch === "MS" ? "MS" : r.batch === "TR" ? "TR" : r.batch === "A18" ? "A18" : ("B" + r.batch)),
                 h("div", { style: { flex: 1, minWidth: 0 } }, [
-                  h("div", { style: { fontSize: 14, fontWeight: 700, color: "#1e293b" } }, r.name),
+                  h("div", { style: { fontSize: 14, fontWeight: 700, color: "#1e293b", textTransform:"uppercase" } }, r.name),
                   h("div", { style: { fontSize: 11, fontWeight: 600, color: "#94a3b8", marginTop: 2 } }, r.label)
                 ]),
                 h("span", { style: { fontSize: 11, color: "#cbd5e1" } }, "→")
@@ -3459,7 +3698,191 @@ h("button", {
         ])
       ])
     ]),
+    
+    showSalinRekapMenu && h("div", { style: { position:"fixed", inset:0, zIndex:220, display:"flex", alignItems:"center", justifyContent:"center", padding:16 } }, [
+  h("div", { onClick: () => { if (!salinRekapBusy) setShowSalinRekapMenu(false); }, style: { position:"absolute", inset:0, background:"rgba(0,0,0,.5)", backdropFilter:"blur(6px)" } }),
+  h("div", { style: { position:"relative", width:"100%", maxWidth:460, maxHeight:"90vh", overflowY:"auto", borderRadius:24, background:"#fff", padding:24, boxShadow:"0 20px 60px -12px rgba(0,0,0,.4)", animation:"scaleIn .25s ease" } }, [
+    h("button", { onClick: () => { if (!salinRekapBusy) setShowSalinRekapMenu(false); }, style: { position:"absolute", right:12, top:12, width:32, height:32, borderRadius:999, background:"#f4f4f5", border:"none", color:"#71717a", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 } }, "✕"),
+    h("div", { style:{ fontSize:16, fontWeight:800, marginBottom:6, paddingRight:30 } }, "📋 Salin Rekap"),
+    h("div", { style:{ fontSize:13, color:"#64748b", marginBottom:16, lineHeight:1.45 } }, "Pilih rentang tanggal. Format: per siswa dengan emoji status per hari."),
 
+    h("div", { style:{ display:"grid", gap:6, marginBottom:12 } },
+      [
+        { id: "1w", label: "1 Minggu", desc: "7 hari terakhir" },
+        { id: "2w", label: "2 Minggu", desc: "14 hari terakhir" },
+        { id: "1m", label: "1 Bulan", desc: "Bulan " + MONTH_NAMES_RK[salinRekapMonth] + " " + salinRekapYear },
+        { id: "custom", label: "Custom", desc: "Pilih tanggal mulai & akhir" }
+      ].map(opt =>
+        h("button", {
+          key: opt.id,
+          onClick: () => handleSalinRekapRangeChange(opt.id),
+          style: { display:"flex", alignItems:"center", gap:10, padding:"10px 14px", borderRadius:12, width:"100%", textAlign:"left", cursor:"pointer",
+            border: salinRekapRange === opt.id ? "2px solid #3b82f6" : "1px solid #e2e8f0",
+            background: salinRekapRange === opt.id ? "#eff6ff" : "#fff" }
+        }, [
+          h("div", { style:{ width:20, height:20, borderRadius:999, flexShrink:0, background:"#fff",
+            border: salinRekapRange === opt.id ? "6px solid #3b82f6" : "2px solid #cbd5e1" } }),
+          h("div", { style:{ flex:1 } }, [
+            h("div", { style:{ fontSize:13, fontWeight:800, color:"#0f172a" } }, opt.label),
+            h("div", { style:{ fontSize:11, fontWeight:600, color:"#94a3b8" } }, opt.desc)
+          ])
+        ])
+      )
+    ),
+
+    salinRekapRange === "1m" && h("div", { style:{ display:"flex", gap:8, marginBottom:12 } }, [
+      h("select", {
+        value: salinRekapMonth,
+        onChange: e => setSalinRekapMonth(Number(e.target.value)),
+        style: { flex:1, height:40, padding:"0 10px", borderRadius:10, border:"1px solid #cbd5e1", fontSize:13, fontWeight:700, background:"#fff", outline:"none" }
+      }, MONTH_NAMES_RK.map((m, i) => h("option", { key: i, value: i }, m))),
+      h("select", {
+        value: salinRekapYear,
+        onChange: e => setSalinRekapYear(Number(e.target.value)),
+        style: { width:100, height:40, padding:"0 10px", borderRadius:10, border:"1px solid #cbd5e1", fontSize:13, fontWeight:700, background:"#fff", outline:"none" }
+      }, (() => { const now = new Date().getFullYear(); const o = []; for (let y = now; y >= now-2; y--) o.push(h("option", { key:y, value:y }, y)); return o; })())
+    ]),
+
+    salinRekapRange === "custom" && h("div", { style:{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 } }, [
+      h("div", null, [
+        h("div", { style:{ fontSize:11, fontWeight:700, color:"#94a3b8", marginBottom:4 } }, "DARI TANGGAL"),
+        h("input", { type:"date", value: salinRekapStart, onChange: e => setSalinRekapStart(e.target.value), style: { width:"100%", height:40, padding:"0 10px", borderRadius:10, border:"1px solid #cbd5e1", fontSize:13, fontWeight:600, outline:"none" } })
+      ]),
+      h("div", null, [
+        h("div", { style:{ fontSize:11, fontWeight:700, color:"#94a3b8", marginBottom:4 } }, "SAMPAI TANGGAL"),
+        h("input", { type:"date", value: salinRekapEnd, onChange: e => setSalinRekapEnd(e.target.value), style: { width:"100%", height:40, padding:"0 10px", borderRadius:10, border:"1px solid #cbd5e1", fontSize:13, fontWeight:600, outline:"none" } })
+      ])
+    ]),
+
+    h("div", { style:{ border:"1px solid #e2e8f0", borderRadius:14, padding:12, marginBottom:16, background:"#fafbff" } }, [
+      h("div", { style:{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8, flexWrap:"wrap", gap:6 } }, [
+        h("div", { style:{ fontSize:11, fontWeight:800, color:"#64748b", letterSpacing:"0.06em" } }, "PILIH BATCH"),
+        h("div", { style:{ display:"flex", gap:6 } }, [
+          h("button", {
+            onClick: () => {
+              const all = {};
+              BATCH_LIST.forEach(b => { all[b] = true; });
+              setSalinRekapSelected(all);
+            },
+            style: { height:28, padding:"0 12px", borderRadius:8, border:"1px solid #cbd5e1", background:"#fff", fontSize:11, fontWeight:700, cursor:"pointer", color:"#0f172a" }
+          }, "✓ Pilih Semua"),
+          h("button", {
+            onClick: () => setSalinRekapSelected({}),
+            style: { height:28, padding:"0 12px", borderRadius:8, border:"1px solid #cbd5e1", background:"#fff", fontSize:11, fontWeight:700, cursor:"pointer", color:"#64748b" }
+          }, "Kosongkan")
+        ])
+      ]),
+      h("div", { style:{ maxHeight:220, overflowY:"auto", display:"flex", flexDirection:"column", gap:4 } },
+        ...BATCH_LIST.map(b => {
+          const checked = !!salinRekapSelected[b];
+          const th = BATCH_THEME[b] || {};
+          const label = th.label || b;
+          const short = b === "MM" ? "MM" : b === "MS" ? "MS" : b === "TR" ? "TR" : b === "A18" ? "A18" : ("B" + b);
+          return h("label", {
+            key: b,
+            style: { display:"flex", alignItems:"center", gap:8, padding:"8px 10px", borderRadius:10, cursor:"pointer",
+              background: checked ? "#eff6ff" : "#fff",
+              border: checked ? "1.5px solid #93c5fd" : "1px solid #e2e8f0",
+              transition: "all .15s" }
+          }, [
+            h("input", {
+              type:"checkbox", checked,
+              onChange: () => setSalinRekapSelected(prev => ({ ...prev, [b]: !prev[b] })),
+              style: { width:18, height:18, accentColor: th.accent || "#3b82f6" }
+            }),
+            h("span", { style:{ padding:"2px 8px", borderRadius:999, fontSize:10, fontWeight:900, background: th.accentLight || "#e2e8f0", color: th.accentDark || "#475569", flexShrink:0 } }, short),
+            h("span", { style:{ fontSize:12, fontWeight:700, color:"#1e293b", flex:1, minWidth:0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" } }, label)
+          ]);
+        })
+      ),
+      h("div", { style:{ fontSize:11, fontWeight:800, color:"#1e40af", marginTop:10, paddingTop:8, borderTop:"1px solid #e2e8f0" } },
+        Object.keys(salinRekapSelected).filter(k => salinRekapSelected[k]).length + " dari " + BATCH_LIST.length + " batch terpilih")
+    ]),
+
+    h("div", { style:{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 } }, [
+      h("button", { onClick: () => setShowSalinRekapMenu(false), disabled: salinRekapBusy, style: { borderRadius:999, background:"#f4f4f5", border:"1px solid #e4e4e7", padding:"12px 16px", fontSize:13, fontWeight:700, color:"#3f3f46", cursor: salinRekapBusy ? "wait" : "pointer", opacity: salinRekapBusy ? 0.6 : 1 } }, "Batal"),
+      h("button", { onClick: doSalinRekap, disabled: salinRekapBusy, style: { borderRadius:999, background:"#25D366", border:"none", color:"#fff", padding:"12px 16px", fontSize:13, fontWeight:800, cursor: salinRekapBusy ? "wait" : "pointer", opacity: salinRekapBusy ? 0.6 : 1 } }, salinRekapBusy ? "Menyusun..." : "📋 Salin")
+    ])
+  ])
+]),
+showBelumAbsen && h("div", { style: { position:"fixed", inset:0, zIndex:195, display:"flex", alignItems:"center", justifyContent:"center", padding:16 } }, [
+  h("div", { onClick: () => setShowBelumAbsen(false), style: { position:"absolute", inset:0, background:"rgba(0,0,0,.5)", backdropFilter:"blur(6px)" } }),
+  h("div", { style: { position:"relative", width:"100%", maxWidth:460, maxHeight:"88vh", borderRadius:24, background:"#fff", padding:24, boxShadow:"0 20px 60px -12px rgba(0,0,0,.4)", animation:"scaleIn .25s ease", display:"flex", flexDirection:"column" } }, [
+    h("button", { onClick: () => setShowBelumAbsen(false), style: { position:"absolute", right:12, top:12, width:32, height:32, borderRadius:999, background:"#f4f4f5", border:"none", color:"#71717a", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 } }, "✕"),
+
+    h("div", { style:{ fontSize:16, fontWeight:800, marginBottom:4, paddingRight:30 } }, "👀 Belum Absen"),
+    h("div", { style:{ fontSize:12, color:"#64748b", marginBottom:14, fontWeight:600, lineHeight:1.5 } }, batchLabel + " · " + formatDateAbsensi(date)),
+
+    belumAbsenList.length === 0
+      ? h("div", { style:{ padding:36, textAlign:"center", background:"#f0fdf4", border:"1px solid #a7f3d0", borderRadius:14 } }, [
+          h("div", { style:{ fontSize:44, marginBottom:6 } }, "✅"),
+          h("div", { style:{ fontSize:15, fontWeight:800, color:"#047857" } }, "Semua sudah diabsen!"),
+          h("div", { style:{ fontSize:12, color:"#16a34a", marginTop:4, fontWeight:600 } }, `${list.length} dari ${list.length} siswa`)
+        ])
+      : h("div", null, [
+          isAdmin && h("div", { style:{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 } }, [
+            h("button", {
+              onClick: markAllHadir,
+              disabled: loadingFb,
+              style: { height:40, borderRadius:10, border:"none", background: loadingFb ? "#86efac" : "#22c55e", color:"#fff", fontWeight:800, fontSize:12, cursor: loadingFb ? "not-allowed" : "pointer", opacity: loadingFb ? 0.6 : 1 }
+            }, `✅ Semua Hadir (${belumAbsenList.length})`),
+            h("button", {
+              onClick: () => { setShowBelumAbsen(false); setTimeout(() => openAlfaConfirm(), 100); },
+              disabled: loadingFb,
+              style: { height:40, borderRadius:10, border:"none", background: loadingFb ? "#fca5a5" : "#ef4444", color:"#fff", fontWeight:800, fontSize:12, cursor: loadingFb ? "not-allowed" : "pointer", opacity: loadingFb ? 0.6 : 1 }
+            }, `❌ Alfakan (${belumAbsenList.length})`)
+          ]),
+          !isAdmin && (() => {
+            const open = isStudentAbsenOpen() && toInputDate(date) === toInputDate(new Date());
+            return h("div", {
+              style: {
+                padding: "10px 12px", borderRadius: 10, marginBottom: 10, fontSize: 12, fontWeight: 700, textAlign: "center",
+                background: open ? "#f0fdf4" : "#fef2f2",
+                border: open ? "1px solid #a7f3d0" : "1px solid #fecaca",
+                color: open ? "#047857" : "#991b1b",
+                lineHeight: 1.5
+              }
+            }, open
+              ? "✅ Absen dibuka — klik tombol di kanan untuk isi status"
+              : "⛔ Absen sudah ditutup / di luar jam — hanya bisa lihat"
+            );
+          })(),
+          h("input", {
+            type: "text", value: belumAbsenSearch,
+            onChange: e => setBelumAbsenSearch(e.target.value),
+            placeholder: "Cari nama...",
+            style: { width: "100%", height: 38, padding: "0 12px", borderRadius: 10, border: "1px solid #cbd5e1", fontSize: 13, fontWeight: 600, outline: "none", marginBottom: 10 }
+          }),
+          h("div", { style:{ flex:1, minHeight: 120, overflowY:"auto", maxHeight:"48vh", border:"1px solid #e2e8f0", borderRadius:12 } },
+            belumAbsenFiltered.length === 0
+              ? h("div", { style:{ padding:20, textAlign:"center", color:"#94a3b8", fontSize:12, fontWeight:600 } }, ["Tidak ada: ", h("strong", null, `"${belumAbsenSearch}"`)])
+              : belumAbsenFiltered.map((name, i) => {
+                  const realIdx = belumAbsenList.indexOf(name);
+                  const canAct = isAdmin || (toInputDate(date) === toInputDate(new Date()) && isStudentAbsenOpen());
+                  const locked = !canAct || loadingFb;
+                  return h("div", { key: name, style:{ display:"flex", alignItems:"center", gap:10, padding:"10px 14px", borderBottom: i < belumAbsenFiltered.length-1 ? "1px solid #f1f5f9" : "none" } }, [
+                    h("span", { style:{ width:26, height:26, borderRadius:999, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, background:"#fee2e2", color:"#dc2626" } }, realIdx + 1),
+                    h("span", { style:{ flex:1, fontWeight:700, fontSize:13, color:"#1e293b", minWidth: 0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", textTransform: "uppercase" } }, name),
+                    loadingFb
+                      ? h("span", { style:{ fontSize: 13, opacity: 0.4, flexShrink: 0 } }, "⏳")
+                      : locked
+                        ? h("span", { style:{ fontSize: 14, opacity: 0.35, flexShrink: 0 } }, "🔒")
+                        : h("div", { style:{ display:"flex", gap:4, flexShrink:0 } }, [
+                            h("button", { onClick: () => { setShowBelumAbsen(false); setTimeout(() => setStatus(name, "HADIR"), 60); }, title: "Hadir", style:{ width:30, height:30, borderRadius:8, border:"1px solid rgba(34,197,94,.4)", background:"#f0fdf4", cursor:"pointer", fontSize:14 } }, "✅"),
+                            h("button", { onClick: () => { setShowBelumAbsen(false); setTimeout(() => setStatus(name, "IZIN"), 60); }, title: "Izin", style:{ width:30, height:30, borderRadius:8, border:"1px solid rgba(59,130,246,.4)", background:"#eff6ff", cursor:"pointer", fontSize:14 } }, "ℹ️"),
+                            h("button", { onClick: () => { setShowBelumAbsen(false); setTimeout(() => setStatus(name, "SAKIT"), 60); }, title: "Sakit", style:{ width:30, height:30, borderRadius:8, border:"1px solid rgba(168,85,247,.4)", background:"#faf5ff", cursor:"pointer", fontSize:14 } }, "🆘"),
+                            h("button", { onClick: () => { setShowBelumAbsen(false); setTimeout(() => setStatus(name, "ALFA"), 60); }, title: "Alfa", style:{ width:30, height:30, borderRadius:8, border:"1px solid rgba(239,68,68,.4)", background:"#fef2f2", cursor:"pointer", fontSize:14 } }, "❌")
+                          ])
+                  ]);
+                })
+          ),
+          h("div", { style:{ fontSize:12, fontWeight:800, color:"#dc2626", marginTop:12, textAlign:"center", padding:"8px", background:"#fef2f2", borderRadius:10 } },
+            belumAbsenFiltered.length !== belumAbsenList.length
+              ? `${belumAbsenFiltered.length} dari ${belumAbsenList.length} siswa (difilter)`
+              : `${belumAbsenList.length} siswa belum absen`)
+        ])
+  ])
+]),
 renameTarget && h("div", {
   style: {
     position:"fixed", inset:0, zIndex:210,
@@ -3496,7 +3919,7 @@ renameTarget && h("div", {
       style: {
         padding: "10px 14px", borderRadius: 10, background: "#f8fafc",
         border: "1px solid #e2e8f0", fontSize: 13, fontWeight: 700, color: "#475569",
-        marginBottom: 12
+        marginBottom: 12, textTransform: "uppercase"
       }
     }, renameTarget),
     h("div", { style:{ fontSize:11, fontWeight:700, color:"#94a3b8", marginBottom:6 } }, "NAMA BARU"),
@@ -3659,6 +4082,56 @@ renameTarget && h("div", {
         }
       }, editSaving ? "Menyimpan..." : "Simpan")
     ])
+  ])
+]),
+
+statusListModal && h("div", { style: { position:"fixed", inset:0, zIndex:195, display:"flex", alignItems:"center", justifyContent:"center", padding:16 } }, [
+  h("div", { onClick: () => setStatusListModal(null), style: { position:"absolute", inset:0, background:"rgba(0,0,0,.5)", backdropFilter:"blur(6px)" } }),
+  h("div", { style: { position:"relative", width:"100%", maxWidth:460, maxHeight:"88vh", borderRadius:24, background:"#fff", padding:24, boxShadow:"0 20px 60px -12px rgba(0,0,0,.4)", animation:"scaleIn .25s ease", display:"flex", flexDirection:"column" } }, [
+    h("button", { onClick: () => setStatusListModal(null), style: { position:"absolute", right:12, top:12, width:32, height:32, borderRadius:999, background:"#f4f4f5", border:"none", color:"#71717a", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 } }, "✕"),
+
+    h("div", { style:{ fontSize:16, fontWeight:800, marginBottom:4, paddingRight:30, display: "flex", alignItems: "center", gap: 8 } }, [
+      h("span", { style: { fontSize: 20 } }, STATUS[statusListModal].icon),
+      h("span", null, "Daftar " + statusListModal)
+    ]),
+    h("div", { style:{ fontSize:12, color:"#64748b", marginBottom:14, fontWeight:600, lineHeight: 1.5 } }, [batchLabel, " · ", formatDateAbsensi(date)]),
+
+    (() => {
+      const filteredList = list.filter(n => normalizeStatus(attendance[n]) === statusListModal);
+      const searchedList = filteredList.filter(n => n.toLowerCase().includes(statusListSearch.toLowerCase()));
+
+      if (filteredList.length === 0) {
+        return h("div", { style:{ padding:36, textAlign:"center", background:"#f8fafc", border:"1px dashed #cbd5e1", borderRadius:14 } }, [
+          h("div", { style:{ fontSize: 44, marginBottom: 6 } }, "📭"),
+          h("div", { style:{ fontSize:14, fontWeight:800, color:"#64748b" } }, `Belum ada yang ${statusListModal}`),
+          h("div", { style:{ fontSize:12, color:"#94a3b8", marginTop:4, fontWeight:600 } }, "0 dari " + list.length + " siswa"),
+        ]);
+      }
+
+      return h("div", null, [
+        h("input", {
+          type: "text", value: statusListSearch,
+          onChange: e => setStatusListSearch(e.target.value),
+          placeholder: "Cari nama...",
+          style: { width: "100%", height: 38, padding: "0 12px", borderRadius: 10, border: "1px solid #cbd5e1", fontSize: 13, fontWeight: 600, outline: "none", marginBottom: 10 }
+        }),
+        h("div", { style:{ flex:1, minHeight: 120, overflowY:"auto", maxHeight:"48vh", border:"1px solid #e2e8f0", borderRadius:12 } },
+          searchedList.length === 0
+            ? h("div", { style:{ padding:20, textAlign:"center", color:"#94a3b8", fontSize:12, fontWeight:600 } }, ["Tidak ada: ", h("strong", null, `"${statusListSearch}"`)])
+            : searchedList.map((name, i) => (
+                h("div", { key: name, style:{ display:"flex", alignItems:"center", gap:10, padding:"10px 14px", borderBottom: i < searchedList.length-1 ? "1px solid #f1f5f9" : "none" } }, [
+                  h("span", { style:{ width:26, height:26, borderRadius:999, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, background: STATUS[statusListModal].bg, color: STATUS[statusListModal].text, border: `1px solid ${STATUS[statusListModal].border}` } }, i + 1),
+                  h("span", { style:{ flex:1, fontWeight:700, fontSize:13, color:"#1e293b", minWidth: 0, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", textTransform:"uppercase" } }, name),
+                  statusListModal === "IZIN" && izinReasons[name] && h("span", { style: { fontSize: 11, fontWeight: 700, color: "#1e3a8a", background: "rgba(59,130,246,.1)", padding: "3px 8px", borderRadius: 999, flexShrink: 0 } }, izinReasons[name])
+                ])
+              ))
+        ),
+        h("div", { style:{ fontSize:12, fontWeight:800, color: STATUS[statusListModal].border, marginTop:12, textAlign:"center", padding:"8px", background: STATUS[statusListModal].bg, borderRadius:10, border: `1px solid ${STATUS[statusListModal].border}` } },
+          searchedList.length !== filteredList.length
+            ? `${searchedList.length} dari ${filteredList.length} siswa (difilter)`
+            : `${filteredList.length} siswa berstatus ${statusListModal}`)
+      ]);
+    })()
   ])
 ]),
 
